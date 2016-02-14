@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+
+<script id="vertex-shader" type="x-shader/x-vertex">
+attribute vec4 vPosition;
+attribute vec4 vColor;
+
+uniform float x_theta;
+uniform float y_theta;
+uniform float z_theta;
+uniform float s;
+
+uniform vec4 cm;
+
+varying vec4 fColor;
+
+void main()
+{
+
+
+  mat4 scale = mat4( s, 0.0, 0.0, 0.0,
+                   0.0,   s, 0.0, 0.0,
+                   0.0, 0.0,   s, 0.0,
+                   0.0, 0.0, 0.0, 1.0 );
+
+
+ float sin_x = sin(x_theta);
+ float cos_x = cos(x_theta);
+ mat4 x_rotation = mat4(1.0,  0.0,   0.0,0.0,
+                        0.0,cos_x,-sin_x,0.0,
+                        0.0,sin_x, cos_x,0.0,
+                        0.0,  0.0,   0.0,1.0);
+
+
+  float sin_y = sin(y_theta);
+  float cos_y = cos(y_theta);
+  mat4 y_rotation = mat4(cos_y,0.0,sin_y,0.0,
+                           0.0,1.0,  0.0,0.0,
+                        -sin_y,0.0,cos_y,0.0,
+                           0.0,0.0,  0.0,1.0);
+
+ float sin_z = sin(z_theta);
+ float cos_z = cos(z_theta);
+ mat4 z_rotation = mat4(cos_z,-sin_z,0.0,0.0,
+                         sin_z,cos_z,0.0,0.0,
+                         0.0,    0.0,1.0,0.0,
+                         0.0,    0.0,0.0,1.0);
+
+  mat4 translation = mat4(1.0,0.0,0.0,cm[0],
+                          0.0,1.0,0.0,cm[1],
+                          0.0,0.0,1.0,cm[2],
+                          0.0,0.0,0.0,1.0);
+
+
+
+  gl_Position = vPosition * x_rotation * y_rotation * z_rotation * scale * translation;
+  fColor = vColor; // pg 91
+
+
+
+
+}
+</script>
+
+<script id="fragment-shader" type="x-shader/x-fragment">
+precision mediump float;
+varying vec4 fColor;
+
+void main()
+{
+    gl_FragColor = fColor;
+}
+</script>
+
+<script type="text/javascript" src="http://www.cs.unm.edu/~angel/WebGL/7E/Common/webgl-utils.js"></script>
+<script type="text/javascript" src="http://www.cs.unm.edu/~angel/WebGL/7E/Common/initShaders.js"></script>
+<script type="text/javascript" src="http://www.cs.unm.edu/~angel/WebGL/7E/Common/MV.js"></script>
+<script type="text/javascript" src="cube_fce.js"></script>
+<script type="text/javascript" src="cube_vtx.js"></script>
+<script type="text/javascript" src="cube.js"></script>
+
+
+
+<body onload="graphics()">
+    <div id="container">
+        <div id="view">
+            <canvas id="gl-canvas" width="512" height="512">
+Oops ... your browser doesn't support the HTML5 canvas element
+</canvas>
+        </div>
+    </div>
+</body>
