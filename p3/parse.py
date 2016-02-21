@@ -9,8 +9,8 @@ def split_and_rejoin(vert):
 # print fn
 # n = sys.argv[1]
 
-fn = 'meshes/sat/m1394.off'
-n = 'sat'
+fn = '/home/nick/Documents/CSCI480/p3/meshes/bomber/m1296.off'
+n = 'bomber'
 
 with open(fn, 'r') as f:
     lines = f.readlines()[1:]
