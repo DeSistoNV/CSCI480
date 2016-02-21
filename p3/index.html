@@ -113,10 +113,10 @@ void main()
 <script type="text/javascript" src="http://www.cs.unm.edu/~angel/WebGL/7E/Common/webgl-utils.js"></script>
 <script type="text/javascript" src="http://www.cs.unm.edu/~angel/WebGL/7E/Common/initShaders.js"></script>
 <script type="text/javascript" src="http://www.cs.unm.edu/~angel/WebGL/7E/Common/MV.js"></script>
-<script type="text/javascript" src="./v_files/ufo/ufo_vtx.js"></script>
-<script type="text/javascript" src="./v_files/ufo/ufo_fce.js"></script>
-<script type="text/javascript" src="./v_files/ufo/ufo_cm.js"></script>
-<script type="text/javascript" src="./v_files/ufo/colors.js"></script>
+<script type="text/javascript" src="./v_files/bomber/bomber_vtx.js"></script>
+<script type="text/javascript" src="./v_files/bomber/bomber_fce.js"></script>
+<script type="text/javascript" src="./v_files/bomber/bomber_cm.js"></script>
+<script type="text/javascript" src="./v_files/bomber/colors.js"></script>
 
 <script type="text/javascript" src="scripts.js"></script>
 <body onload="config()">
@@ -131,13 +131,16 @@ Oops ... your browser doesn't support the HTML5 canvas element
 </div>
         </div>
         <div id="toolbar">
-            Rx<input id= "rotx" type="range" min="-100" max="100" value="0" step="1" name="power" list="powers"><br>
-            Ry<input id= "roty" type="range" min="-100" max="100" value="0" step="1" name="power" list="powers"><br>
-            Rz<input id= "rotz" type="range" min="-100" max="100" value="0" step="1" name="power" list="powers"><br>
-            S<input id= "scale" type="range" min=".5" max="5" value="0" step=".01" name="power" list="powers"><br>
-            Tx<input id= "xtrans" type="range" min="-1" max="1" value="0" step=".001" name="power" list="powers"><br>
-            Ty<input id= "ytrans" type="range" min="-1" max="1" value="0" step=".001" name="power" list="powers"><br>
-            Tz<input id= "ztrans" type="range" min="-1" max="1" value="0" step=".001" name="power" list="powers">
+            X rotation<input id= "rotx" type="range" min="-100" max="100" value="0" step="1" name="power" list="powers"><br>
+            Y rotation<input id= "roty" type="range" min="-100" max="100" value="0" step="1" name="power" list="powers"><br>
+            Z rotation<input id= "rotz" type="range" min="-100" max="100" value="0" step="1" name="power" list="powers"><br>
+            Uniform scaling<input id= "scale" type="range" min=".1" max="3" value="0" step=".01" name="power" list="powers"><br>
+           <!--  <input id= "xtrans" type="range" min="-1" max="1" value="0" step=".001" name="power" list="powers"><br>
+            Ty<input id= "ytrans" type="range" min="-1" max="1" value="0" step=".001" name="power" list="powers"><br> -->
+            <!-- Tz<input id= "ztrans" type="range" min="-1" max="1" value="0" step=".001" name="power" list="powers"> -->
+            <p>Click To Translate in X and Y<br>
+            Use Mouse Wheel to Translate in Z<br><p>
+
     </div>
   </div>
 </body>

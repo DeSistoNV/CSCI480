@@ -26,9 +26,58 @@ var mesh = [];
 var color = [];
 var normals = [];
 var color = new Array();
-var xtransvar = 0.0;
-var ytransvar = 0.0;
-var ztransvar = 0.0;
+var xtransvar = 0;
+var ytransvar = 0;
+var ztransvar = 0;
+var clicked = false;
+
+
+
+
+function MouseWheelHandler(e) {
+
+    // cross-browser wheel delta
+    var e = window.event || e; // old IE support
+    var delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)));
+    ztransvar += delta * .1;
+    if(ztransvar > 1){
+        ztransvar = 1;
+    }
+    if(ztransvar < -1){
+        ztransvar = -1;
+    }
+
+}
+
+const smooth_steps = 300; // controls speed of movement
+var step_count = smooth_steps; // controller for movement iteration
+// iniitalizing movement step arrays
+var x_click = new Array(smooth_steps);
+for (var i = 0; i <= smooth_steps; i++) x_click[i] = 0;
+var y_click = new Array(smooth_steps);
+for (var i = 0; i <= smooth_steps;i++) y_click[i] = 0;
+
+function moveToClick(e){
+    clicked = true;
+
+  orig_x = xtransvar;
+  orig_y = ytransvar;
+console.log('client : (' + e.clientX + ',' + e.clientY + ')');
+
+  new_x = (-1 + 2 * e.clientX / 1000 ) ;
+  new_y =  (-1 + 2 * (1000-e.clientY)/1000);
+  console.log('calced : (' + new_x + ',' + new_y + ')');
+
+  dist_x = new_x - orig_x;
+  dist_y = new_y - orig_y;
+  for(var i=0;i <= smooth_steps;i++){
+    // formulas from pg 122
+    x_click[i] = orig_x + dist_x * i / smooth_steps;
+    y_click[i] = orig_y + dist_y * i / smooth_steps;
+  }
+  step_count = 0;
+
+}
 
 function config() {
     $("#rotx").on("input", function(){rotateX();});
@@ -39,6 +88,15 @@ function config() {
     $("#ytrans").on("input", function(){ytrans(this.value);});
     $("#ztrans").on("input", function(){ztrans(this.value);});
     var canvas = document.getElementById( "gl-canvas" );
+    canvas.onclick=function(event){
+        moveToClick(event);
+
+    };
+
+    // IE9, Chrome, Safari, Opera
+    canvas.addEventListener("mousewheel", MouseWheelHandler, false);
+    // Firefox
+    canvas.addEventListener("DOMMouseScroll", MouseWheelHandler, false);
 
     gl = WebGLUtils.setupWebGL( canvas );
     if ( !gl ) { alert( "WebGL isn't available" ); }
@@ -114,7 +172,13 @@ function config() {
 
 
 
-    render();
+    animate();
+
+}
+
+function animate() {
+
+    timerID=setInterval( render,1);
 
 }
 
@@ -169,15 +233,16 @@ function scale(s_val) {
 }
 
 function xtrans(s_val) {
-
     xtransvar = Number(s_val);
+    clicked= false;
 
-    gl.uniform4f(cm, CM[0] + xtransvar, CM[1] + ytransvar,CM[2] + ztransvar,0.0);
-
+    gl.uniform4f(cm, CM[0] - xtransvar, CM[1] - ytransvar,CM[2] + ztransvar,0.0);
+    console.log('current : (' + xtransvar + ',' + ytransvar + ')');
     render();
 
 }
 function ytrans(s_val) {
+    clicked= false;
 
   ytransvar=Number(s_val);
 
@@ -191,7 +256,7 @@ function ztrans(s_val) {
   ztransvar=Number(s_val);
 
 
-  gl.uniform4f(cm, CM[0] + xtransvar,CM[1] + ytransvar,CM[2] + ztransvar,0.0);
+  gl.uniform4f(cm, CM[0] - xtransvar,CM[1] - ytransvar,CM[2] + ztransvar,0.0);
 
     render();
 
@@ -229,8 +294,24 @@ function bufferData() {
 
 function render() {
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-
     for ( var i=0; i<F.length*3; i+=3) {
 
       gl.drawArrays( gl.TRIANGLES, i, 3 );
-}}
+}
+
+
+    if (step_count++ < smooth_steps){
+      gl.uniform4f( cm, CM[0] - x_click[step_count],CM[1] -y_click[step_count], CM[2] + ztransvar, 0.0 );
+    }
+    else{
+        if(clicked){
+    xtransvar = x_click[smooth_steps];
+    ytransvar = y_click[smooth_steps];
+}
+    gl.uniform4f( cm, CM[0] - xtransvar, CM[1] - ytransvar, CM[2] + ztransvar, 0.0 );
+    console.log('rendered at: (' + xtransvar + ',' + ytransvar + ','+ ztransvar +')');
+
+
+  }
+
+}
