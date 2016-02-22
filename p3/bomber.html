@@ -105,7 +105,7 @@ void main()
 
   if( dot(L, N) < 0.0 ) specular = vec4(0.0, 0.0, 0.0, 1.0);
 
-  vec4 fColor = ambient + diffuse +specular;
+  vec4 fColor = ambient + diffuse + specular;
     gl_FragColor =  fColor;
 }
 </script>
@@ -131,15 +131,20 @@ Oops ... your browser doesn't support the HTML5 canvas element
 </div>
         </div>
         <div id="toolbar">
-            X rotation<input id= "rotx" type="range" min="-100" max="100" value="0" step="1" name="power" list="powers"><br>
-            Y rotation<input id= "roty" type="range" min="-100" max="100" value="0" step="1" name="power" list="powers"><br>
-            Z rotation<input id= "rotz" type="range" min="-100" max="100" value="0" step="1" name="power" list="powers"><br>
-            Uniform scaling<input id= "scale" type="range" min=".1" max="3" value="0" step=".01" name="power" list="powers"><br>
+            <div id="rx"> </div><input id= "rotx" type="range" min="-180" max="180" value="0" step="1" name="power" list="powers">
+        <br>
+            <div id="ry"></div><input id= "roty" type="range" min="-180" max="180" value="0" step="1" name="power" list="powers">
+            <div id="rz"></div><input id= "rotz" type="range" min="-100" max="100" value="0" step="1" name="power" list="powers">
+            <div id="scalet"></div><input id= "scale" type="range" min=".1" max="3" value="0" step=".01" name="power" list="powers"><br>
            <!--  <input id= "xtrans" type="range" min="-1" max="1" value="0" step=".001" name="power" list="powers"><br>
             Ty<input id= "ytrans" type="range" min="-1" max="1" value="0" step=".001" name="power" list="powers"><br> -->
             <!-- Tz<input id= "ztrans" type="range" min="-1" max="1" value="0" step=".001" name="power" list="powers"> -->
-            <p>Click To Translate in X and Y<br>
-            Use Mouse Wheel to Translate in Z<br><p>
+            <p id="trans">Click To Translate in X and Y<p>
+            Use Mouse Wheel to Translate in Z<br>
+            <div id="translate"></div>
+
+          </br?>
+
 
     </div>
   </div>

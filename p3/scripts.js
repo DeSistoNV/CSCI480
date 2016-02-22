@@ -46,6 +46,7 @@ function MouseWheelHandler(e) {
     if(ztransvar < -1){
         ztransvar = -1;
     }
+    $('#translate').text("(" + Math.round(xtransvar*100)/100 +", " + Math.round(ytransvar*100)/100 + ", " + Math.round(ztransvar*100)/100+ ")");
 
 }
 
@@ -67,6 +68,7 @@ console.log('client : (' + e.clientX + ',' + e.clientY + ')');
   new_x = (-1 + 2 * e.clientX / 1000 ) ;
   new_y =  (-1 + 2 * (1000-e.clientY)/1000);
   console.log('calced : (' + new_x + ',' + new_y + ')');
+  $('#translate').text("(" + Math.round(xtransvar*100)/100 +", " + Math.round(ytransvar*100)/100 + ", " + Math.round(ztransvar*100)/100+ ")");
 
   dist_x = new_x - orig_x;
   dist_y = new_y - orig_y;
@@ -92,6 +94,12 @@ function config() {
         moveToClick(event);
 
     };
+    $('#rx').text("X rotation (" +0 + '\u00B0' + ")");
+    $('#ry').text("Y rotation (" +0 + '\u00B0' + ")");
+    $('#rz').text("Z rotation (" +0 + '\u00B0' + ")");
+    $('#scalet').text("Scale (" +1 + ")");
+    $('#translate').text("(0,0,0)");
+
 
     // IE9, Chrome, Safari, Opera
     canvas.addEventListener("mousewheel", MouseWheelHandler, false);
@@ -188,6 +196,7 @@ function rotateX() {
     ang_deg = select.value;
 
     var radian =  ang_deg * (Math.PI/180.0);
+    $('#rx').text("X rotation (" +ang_deg + '\u00B0' + ")");
 
 
     gl.uniform1f( xang, radian );
@@ -202,6 +211,7 @@ function rotateY() {
   var select = document.getElementById('roty');
   ang_deg = select.value;
     var radian =  ang_deg * (Math.PI/180.0);
+    $('#ry').text("Y rotation (" +ang_deg + '\u00B0' + ")");
 
 
     gl.uniform1f( yang, radian );
@@ -214,6 +224,7 @@ function rotateZ() {
   var select = document.getElementById('rotz');
   ang_deg = select.value;
     var radian =  ang_deg * (Math.PI/180.0);
+    $('#rz').text("Z rotation (" +ang_deg + '\u00B0' + ")");
 
 
     gl.uniform1f( zang, radian );
@@ -224,6 +235,7 @@ function rotateZ() {
 
 function scale(s_val) {
 
+    $('#scalet').text("Scale (" +s_val+ ")");
 
 
     gl.uniform1f( sx, s_val );
@@ -235,9 +247,11 @@ function scale(s_val) {
 function xtrans(s_val) {
     xtransvar = Number(s_val);
     clicked= false;
+    var s = "(" + xtransvar +"," + ytransvar + "," + ztransvar+ ")";
+    console.log(s);
+    $('#translate').text(s);
 
     gl.uniform4f(cm, CM[0] - xtransvar, CM[1] - ytransvar,CM[2] + ztransvar,0.0);
-    console.log('current : (' + xtransvar + ',' + ytransvar + ')');
     render();
 
 }
@@ -245,6 +259,7 @@ function ytrans(s_val) {
     clicked= false;
 
   ytransvar=Number(s_val);
+  $('#translate').text("(" + xtransvar +"," + ytransvar + "," + ztransvar+ ")");
 
 gl.uniform4f(cm, CM[0]+xtransvar,CM[1] + ytransvar,CM[2] + ztransvar,0.0);
 
@@ -255,6 +270,7 @@ function ztrans(s_val) {
 
   ztransvar=Number(s_val);
 
+  $('#translate').text("(" + xtransvar +"," + ytransvar + "," + ztransvar+ ")");
 
   gl.uniform4f(cm, CM[0] - xtransvar,CM[1] - ytransvar,CM[2] + ztransvar,0.0);
 
@@ -290,9 +306,11 @@ function bufferData() {
     gl.enableVertexAttribArray( vColor );
 
     gl.bufferData( gl.ARRAY_BUFFER, flatten(color), gl.STATIC_DRAW );
+
 }
 
 function render() {
+
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
     for ( var i=0; i<F.length*3; i+=3) {
 
@@ -309,7 +327,6 @@ function render() {
     ytransvar = y_click[smooth_steps];
 }
     gl.uniform4f( cm, CM[0] - xtransvar, CM[1] - ytransvar, CM[2] + ztransvar, 0.0 );
-    console.log('rendered at: (' + xtransvar + ',' + ytransvar + ','+ ztransvar +')');
 
 
   }
